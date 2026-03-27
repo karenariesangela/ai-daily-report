@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⚡ 全球AI动态日报 · 2026-03-27</title>
+<style>
+  :root {
+    --bg: #0a0d14;
+    --sidebar-bg: #111520;
+    --card: #161a26;
+    --card-hover: #1d2235;
+    --border: #252a3a;
+    --text: #dce0ec;
+    --text-muted: #7a7f94;
+    --accent: #7c6fff;
+    --accent-dim: rgba(124,111,255,0.12);
+    --tag-new: #7c6fff;
+    --tag-industry: #00c9a7;
+    --tag-biz: #ff9f43;
+    --tag-startup: #ff6b9d;
+    --tag-discuss: #22d3ee;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+    line-height: 1.7;
+    min-height: 100vh;
+    display: flex;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    width: 220px;
+    min-height: 100vh;
+    background: var(--sidebar-bg);
+    border-right: 1px solid var(--border);
+    position: fixed;
+    top: 0; left: 0;
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    overflow-y: auto;
+  }
+  .sidebar-logo {
+    padding: 1.5rem 1.2rem 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .sidebar-logo h2 {
+    font-size: 1rem;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.3px;
+  }
+  .sidebar-logo span {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+  }
+  .sidebar-nav { padding: 1rem 0; flex: 1; }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.65rem 1.2rem;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    transition: all 0.15s;
+    border-left: 3px solid transparent;
+    text-decoration: none;
+  }
+  .nav-item:hover { color: var(--text); background: rgba(255,255,255,0.04); }
+  .nav-item.active { color: #fff; border-left-color: var(--accent); background: var(--accent-dim); }
+  .nav-item .n-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .nav-item .n-count {
+    margin-left: auto;
+    background: rgba(255,255,255,0.08);
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.1rem 0.45rem;
+    border-radius: 10px;
+  }
+  .sidebar-footer {
+    padding: 1rem 1.2rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.72rem;
+    color: var(--text-muted);
+  }
+
+  /* Main Content */
+  .main {
+    margin-left: 220px;
+    flex: 1;
+    min-width: 0;
+  }
+  .container { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+  /* Header */
+  .header {
+    padding: 2.5rem 0 2rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2rem;
+  }
+  .header .date {
+    font-size: 0.8rem;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+  }
+  .header h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.4rem;
+  }
+  .header .subtitle { color: var(--text-muted); font-size: 0.9rem; }
+
+  /* Stats Row */
+  .stats-row {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+  }
+  .stat-pill {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.82rem;
+    transition: all 0.2s;
+    cursor: pointer;
+    text-decoration: none;
+    color: var(--text);
+  }
+  .stat-pill:hover { border-color: var(--accent); transform: translateY(-1px); }
+  .stat-pill .sp-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .stat-pill .sp-num { font-weight: 800; font-size: 0.9rem; }
+
+  /* Section */
+  .section { margin-bottom: 2.5rem; }
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 2px solid;
+    cursor: pointer;
+    user-select: none;
+  }
+  .section-header.collapsed .section-title .chevron { transform: rotate(-90deg); }
+  .section-header.collapsed .card-grid { display: none; }
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+  }
+  .section-title .chevron {
+    transition: transform 0.2s;
+    font-size: 0.7rem;
+    opacity: 0.6;
+  }
+  .dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+  .new-header { border-color: var(--tag-new); }
+  .new-header .section-title { color: var(--tag-new); }
+  .new-header .dot { background: var(--tag-new); }
+  .industry-header { border-color: var(--tag-industry); }
+  .industry-header .section-title { color: var(--tag-industry); }
+  .industry-header .dot { background: var(--tag-industry); }
+  .biz-header { border-color: var(--tag-biz); }
+  .biz-header .section-title { color: var(--tag-biz); }
+  .biz-header .dot { background: var(--tag-biz); }
+  .startup-header { border-color: var(--tag-startup); }
+  .startup-header .section-title { color: var(--tag-startup); }
+  .startup-header .dot { background: var(--tag-startup); }
+  .discuss-header { border-color: var(--tag-discuss); }
+  .discuss-header .section-title { color: var(--tag-discuss); }
+  .discuss-header .dot { background: var(--tag-discuss); }
+
+  .toggle-btn {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.25rem 0.6rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .toggle-btn:hover { background: rgba(255,255,255,0.1); color: var(--text); }
+
+  /* Cards */
+  .card-grid { display: flex; flex-direction: column; gap: 0.7rem; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.2s;
+  }
+  .card:hover { border-color: var(--card-accent, var(--accent)); }
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1.1rem 1.1rem 0.8rem;
+    cursor: pointer;
+    user-select: none;
+  }
+  .card-top.accent-bar::before {
+    content: '';
+    width: 3px;
+    min-height: 100%;
+    background: var(--card-accent, var(--accent));
+    border-radius: 2px;
+    flex-shrink: 0;
+    align-self: stretch;
+  }
+  .card-body {
+    flex: 1;
+    min-width: 0;
+  }
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.35rem;
+    flex-wrap: wrap;
+  }
+  .card-source {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+  .card-tag {
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 0.15rem 0.5rem;
+    border-radius: 20px;
+    flex-shrink: 0;
+  }
+  .card-tag.intl { background: rgba(124,111,255,0.15); color: #a5b4fc; }
+  .card-tag.dom { background: rgba(0,201,167,0.15); color: #5eead4; }
+  .card-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.4;
+    margin-bottom: 0.4rem;
+  }
+  .card-summary {
+    font-size: 0.85rem;
+    color: #b0b4c8;
+    line-height: 1.7;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    transition: all 0.2s;
+  }
+  .card.expanded .card-summary { -webkit-line-clamp: unset; }
+  .card-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.7rem 1.1rem;
+    border-top: 1px solid rgba(255,255,255,0.04);
+  }
+  .card-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.78rem;
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .card-link:hover { color: #a5b4fc; }
+  .expand-btn {
+    margin-left: auto;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 0.2rem 0.55rem;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .expand-btn:hover { background: rgba(255,255,255,0.08); color: var(--text); }
+  .card.expanded .expand-btn { display: none; }
+
+  /* HN Discuss */
+  .discuss-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.9rem 1.1rem;
+    margin-bottom: 0.6rem;
+    display: flex;
+    gap: 0.9rem;
+    align-items: flex-start;
+    transition: all 0.2s;
+  }
+  .discuss-item:hover { border-color: var(--tag-discuss); }
+  .discuss-score {
+    min-width: 40px;
+    height: 40px;
+    background: rgba(34,211,238,0.1);
+    border: 1px solid rgba(34,211,238,0.2);
+    border-radius: 7px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .discuss-score .ds-num { font-size: 0.95rem; font-weight: 800; color: var(--cyan); line-height: 1; }
+  .discuss-score .ds-label { font-size: 0.58rem; color: var(--text-muted); }
+  .discuss-body { flex: 1; min-width: 0; }
+  .discuss-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.25rem;
+    line-height: 1.4;
+  }
+  .discuss-meta { font-size: 0.75rem; color: var(--text-muted); }
+  .discuss-item.collapsed .discuss-body { display: none; }
+  .discuss-item.collapsed .discuss-expand { display: none; }
+  .discuss-expand {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 0.2rem 0.55rem;
+    cursor: pointer;
+    margin-left: auto;
+    flex-shrink: 0;
+    align-self: center;
+    transition: all 0.15s;
+  }
+  .discuss-expand:hover { background: rgba(255,255,255,0.08); }
+  .discuss-item.expanded .discuss-expand { display: none; }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    padding: 2rem 0;
+    border-top: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    margin-top: 2rem;
+  }
+
+  /* Animations */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .card, .discuss-item, .stat-pill { animation: fadeInUp 0.35s ease both; }
+  .stats-row .stat-pill:nth-child(1) { animation-delay: 0.05s; }
+  .stats-row .stat-pill:nth-child(2) { animation-delay: 0.1s; }
+  .stats-row .stat-pill:nth-child(3) { animation-delay: 0.15s; }
+  .stats-row .stat-pill:nth-child(4) { animation-delay: 0.2s; }
+  .stats-row .stat-pill:nth-child(5) { animation-delay: 0.25s; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  @media (max-width: 768px) {
+    .sidebar { display: none; }
+    .main { margin-left: 0; }
+    .header h1 { font-size: 1.5rem; }
+    .stats-row { gap: 0.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h2>⚡ ANG日报</h2>
+    <span>2026-03-27 · 周五</span>
+  </div>
+  <div class="sidebar-nav">
+    <a href="#summary" class="nav-item active">
+      <span class="n-dot" style="background:var(--accent)"></span>总览
+    </a>
+    <a href="#new" class="nav-item">
+      <span class="n-dot" style="background:var(--tag-new)"></span>新品动态
+      <span class="n-count">6</span>
+    </a>
+    <a href="#industry" class="nav-item">
+      <span class="n-dot" style="background:var(--tag-industry)"></span>行业资讯
+      <span class="n-count">8</span>
+    </a>
+    <a href="#biz" class="nav-item">
+      <span class="n-dot" style="background:var(--tag-biz)"></span>商业运用
+      <span class="n-count">6</span>
+    </a>
+    <a href="#startup" class="nav-item">
+      <span class="n-dot" style="background:var(--tag-startup)"></span>创业模式
+      <span class="n-count">5</span>
+    </a>
+    <a href="#discuss" class="nav-item">
+      <span class="n-dot" style="background:var(--tag-discuss)"></span>热门讨论
+      <span class="n-count">6</span>
+    </a>
+  </div>
+  <div class="sidebar-footer">
+    数据来源：WIRED · HN · OpenAI<br>
+    MIT Tech Review · Symbolica等
+  </div>
+</nav>
+
+<!-- Main Content -->
+<main class="main">
+<div class="container">
+
+  <!-- Header -->
+  <div class="header" id="summary">
+    <div class="date">2026-03-27 · 周五 · GMT+8 10:43</div>
+    <h1>⚡ 全球AI动态日报</h1>
+    <div class="subtitle">24小时AI资讯全景 · 国内外精选 · 数据源：WIRED / Hacker News / OpenAI / MIT Tech Review / Symbolica</div>
+  </div>
+
+  <!-- Stats Pill Row -->
+  <div class="stats-row">
+    <a href="#new" class="stat-pill"><span class="sp-dot" style="background:var(--tag-new)"></span><span class="sp-num">6</span> 新品动态</a>
+    <a href="#industry" class="stat-pill"><span class="sp-dot" style="background:var(--tag-industry)"></span><span class="sp-num">8</span> 行业资讯</a>
+    <a href="#biz" class="stat-pill"><span class="sp-dot" style="background:var(--tag-biz)"></span><span class="sp-num">6</span> 商业运用</a>
+    <a href="#startup" class="stat-pill"><span class="sp-dot" style="background:var(--tag-startup)"></span><span class="sp-num">5</span> 创业模式</a>
+    <a href="#discuss" class="stat-pill"><span class="sp-dot" style="background:var(--tag-discuss)"></span><span class="sp-num">6</span> 热门讨论</a>
+  </div>
+
+  <!-- ========== 新品动态 ========== -->
+  <div class="section" id="new">
+    <div class="section-header new-header" onclick="toggleSection(this)">
+      <div class="section-title">
+        <span class="dot"></span>🆕 新品动态
+        <span class="chevron">▼</span>
+      </div>
+      <button class="toggle-btn">收起 ∆</button>
+    </div>
+    <div class="card-grid">
+
+      <div class="card" style="--card-accent:var(--tag-new)">
+        <div class="card-top accent-bar" onclick="toggleCard(this)">
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="card-source">🇺🇸 OpenAI · 2026-03-25</span>
+              <span class="card-tag intl">🌐 国际</span>
+            </div>
+            <div class="card-title">OpenAI 发布安全漏洞赏金计划（Safety Bug Bounty）</div>
+            <div class="card-summary">
+              OpenAI 正式推出安全漏洞赏金计划，邀请全球安全研究人员参与发现并报告其模型和系统中的安全漏洞。奖金从 200 美元到百万美元不等，覆盖模型对齐失效、数据泄露、Agent 系统操纵等高危问题。此举被视为 OpenAI 在 GPT-4o 发布后加强安全生态的关键动作，旨在建立白帽社区与 AI 安全的正向循环。计划页面详细披露了漏洞评级标准和奖励机制。
+            </div>
+          </div>
+        </div>
+        <div class="card-actions">
+          <a class="card-link" href="https://openai.com/index/safety-bug-bounty/" target="_blank">阅读原文 ↗</a>
+          <button class="expand-btn" onclick="toggleCard(this)">展开</button>
+        </div>
+      </div>
+
+      <div class="card" style="--card-accent:var(--tag-new)">
+        <div class="card-top accent-bar" onclick="toggleCard(this)">
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="card-source">🇺🇸 OpenAI · 2026-03-24</span>
+              <span class="card-tag intl">🌐 国际</span>
+            </div>
+            <div class="card-title">OpenAI ChatGPT 内测「AI产品发现」新功能</div>
+            <div class="card-summary">
+              OpenAI 宣布 ChatGPT 新增「Powering Product Discovery」功能，通过大模型实现更智能的产品推荐与发现体验。该功能结合多模态理解能力，用户可用自然语言描述需求，AI 即时推荐相关产品或解决方案，标志着 ChatGPT 从对话工具向个人AI助手和商业入口转型。早期测试显示推荐准确率显著高于传统搜索引擎。
+            </div>
+          </div>
+        </div>
+        <div class="card-actions">
+          <a class="card-link" href="https://openai.com/index/powering-product-discovery-in-chatgpt/" target="_blank">阅读原文 ↗</a>
+          <button class="expand-btn" onclick="toggleCard(this)">展开</button>
+        </div>
+      </div>
+
+      <div class="card" style="--card-accent:var(--tag-new)">
+        <div class="card-top accent-bar" onclick="toggleCard(this)">
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="card-source">🇺🇸 OpenAI · 2026-03-19</span>
+              <span class="card-tag intl">🌐 国际</span>
+            </div>
+            <div class="card-title">OpenAI 收购 AI 编程公司 Astral，进军自动化代码生成</div>
+            <div class="card-summary">
+              OpenAI 宣布收购 Astral，后者是一家专注于 AI 驱动代码生成与自动化编程的初创公司。Astral 的核心产品基于机器学习实现代码补全与重构，被认为可与 GitHub Copilot 形成差异化竞争。收购完成后，其技术将被深度整合至 OpenAI 开发者工具链，分析师认为此举将进一步巩固 OpenAI 在 AI 编程市场的领先地位。
+            </div>
+          </div>
+        </div>
+        <div class="card-actions">
+          <a class="card-link" href="https://openai.com/index/openai-to-acquire-astral/" target="_blank">阅读原文 ↗</a>
+          <button class="expand-btn" onclick="toggleCard(this)">展开</button>
+        </div>
+      </div>
+
+      <div class="card" style="--card-accent:var(--tag-new)">
+        <div class="card-top accent-bar" onclick="toggleCard(this)">
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="card-source">🇺🇸 OpenAI · 2026-03-25</span>
+              <span class="card-tag intl">🌐 国际</span>
+            </div>
+            <div class="card-title">OpenAI 发布《模型规范》研究论文，系统披露对齐研究进展</div>
+            <div class="card-summary">
+              OpenAI 发布《Inside our approach to the Model Spec》，首次系统披露其模型行为规范的设计思路与对齐研究进展。文档详细阐述了 AI 在不同场景下应当优先遵循的原则，包括安全性、可解释性与人类意图对齐等技术细节，被学术界视为继 GPT-4 后公开的最重要安全研究文献之一，引发了对齐社区广泛讨论。
+            </div>
+          </div>
+        </div>
+        <div class="card-actions">
+          <a class="card-link" href="https://openai.com/index/our-approach-to-the-model-spec/" target="_blank">阅读原文 ↗</a>
+          <button class="expand-btn" onclick="toggleCard(this)">展开</button>
+        </div>
+      </div>
+
+      <div class="card" style="--card-accent:var(--tag-new)">
+        <div class="card-top accent-bar" onclick="toggleCard(this)">
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="card-source">🇯🇵 OpenAI Japan · 2026-03-17</span>
+              <span class="card-tag intl">🌐 国际</span>
+            </div>
+            <div class="card-title">OpenAI 日本发布青少年 AI 安全蓝图（Japan Teen Safety Blueprint）</div>
+            <div class="card-summary">
+              OpenAI 日本团队发布「Japan Teen Safety Blueprint」，针对青少年用户推出专项安全策略，包括内容过滤、使用时长管理、家长控制等模块。该政策被视为 OpenAI 应对全球监管压力的区域化合规样本，也为其在亚洲市场规模化落地提供政策基础，被认为可能成为其他地区的监管参考范本。
+            </div>
+          </div>
+        </div>
+        <div class="card-actions">
+          <a class="card-link" href="https://openai.com/index/japan-teen-safety-blueprint/" target="_blank">阅读原文 ↗</a>
+          <button class="expand-btn" onclick="toggleCard(this)">展开</button>
+        </div>
+      </div>
+
+      <div class="card" style="--card-accent:var(--tag-new)">
+        <div class="card-top accent-bar" onclick="toggleCard(this)">
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="card-source">🇺🇸 9to5Mac · 2026-03-26 · HN 293分</span>
+              <span class="card-tag intl">🌐 国际</span>
+            </div>
+            <div class="card-title">Apple 正式宣布停产 Mac Pro，Intel 芯片时代终结</div>
+            <div class="card-summary">
+              Apple 于3月26日宣布停止 Mac Pro 产品线，结束了 Intel 芯片在苹果生态的最后一款主要产品。此举被普遍解读为 Apple 加速全链路自研芯片战略的一部分，分析师认为其下一代设备将全面集成定制化 NPU 以支撑本地 AI 计算任务。Mac Pro 停产后，苹果工作站产品线将全面转向 Apple Silicon 架构。
+            </div>
+          </div>
+        </div>
+        <div class="card-actions">
+          <a class="card-link" href="https://9to5mac.com/2026/03/26/apple-discontinues-the-mac-pro/" target="_blank">阅读原文 ↗</a>
+          <button class="expand-btn" onclick="toggleCard(this)">展开</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========== 行业资讯 ========== -->
+  <div class="section" id="industry">
+    <div class="section-header industry-header" onclick="toggleSection(this)">
+      <div class="section-title">
+        <span class="dot"></span>📰 行业资讯
+        <span class="chevron">▼</span>
+      </div>
+      <button class="toggle-btn">收起 ∆</button>
+    </div>
+    <div class="card-grid">
+
+      <div class="card" style="--card-accent:var(--tag-industry)">
+        <div class="card-top accent-bar" onclick="toggleCard(this)">
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="card-source">🇺🇸 WIRED · 2026-03-27</span>
+              <span class="card-tag intl">🌐 国际</span>
+            </div>
+            <div class="card-title">美国参议院要求 AI 数据中心上报能源消耗数据</div>
+            <div class="card-summary">
+              美国参议院两党议员（Elizabeth Warren + Josh Hawley）联合要求各大 AI 数据中心运营方定期上报能源消耗与用水量数据，以评估 AI 产业扩张对国家电网的影响。议员们在信中指出，数据中心用电信息对电网规划和防止普通家庭电费上涨至关重要。目前 EIA 已启动自愿试点项目，但议员们正在推动将其改为强制披露。
+            </div>
+          </div>
+        </div>
+        <div class="card-actions">
+          <a class="card-link" href="https://www.wired.com/story/senators-demand-to-know-how-much-energy-data-centers-use/" target="_blank">阅读原文 ↗</a>
+          <button class="expand-btn" onclick="toggleCard(this)">展开</button>
+        </div>
+      </div>
+
+      <div class="card" style="--card-accent:var(--tag-industry)">
+        <div class="card-top accent-bar" onclick="toggleCard(this)">
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="card-source">🇺🇸 WIRED · 2026-03-25</span>
+              <span class="card-tag intl">🌐 国际</span>
+            </div>
+            <div class="card-title">Bernie Sanders 提出新 AI 安全法案：全国暂停新建数据中心</div>
+            <div class="card-summary">
+              参议员 Bernie Sanders 联合进步派议员提出《AI数据中心暂停法案》，要求在联邦层面暂停新建大型 AI 数据中心的审批，直至完成对电力消耗、环境影响和劳动力的全面评估，并出台 AI 安全法律。该法案同时要求科技公司确保 AI 产生的财富「与美国人民共享」，并点名了 Elon Musk、Sam Altman 等高管。众议员 Alexandria Ocasio-Cortez 也将在众议院提出类似法案。
+            </div>
+          </div>
+        </div>
+        <div class="card-actions">
+          <a class="card-link" href="https://www.wired.com/story/new-bernie-sanders-ai-safety-bill-would-halt-data-center-construction/" target="_blank">阅读原文 ↗</a>
+          <button class="expand-btn" onclick="toggleCard(this)">展开</button>
+        </div>
+      </div>
+
+      <div class="card" style="--card-accent:var(--tag-industry)">
+        <div class="card-top accent-bar" onclick="toggleCard(this)">
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="card-source">🇺🇸 WIRED · 2026-03-24</span>
+              <span class="card-tag intl">🌐 国际</span>
+            </div>
+            <div class="card-title">五角大楼试图削弱 Anthropic 引发法官严重关切</div>
+            <div class="card-summary">
+              美国联邦法官 Rita Lin 在听证会上对五角大楼将 Anthropic 列为「供应链风险」的行为表示严重关切，称这「看起来是对 Anthropic 的惩罚」，因为该公司试图对军事用途加以限制。法官认为这可能违反了宪法第一修正案。Anthropic 已提起两项联邦诉讼，指控特朗普政府此举属于非法报复。法官将在数日内裁决是否暂停这一 designation。
+            </div>
+          </div>
+        </div>
+        <div class="card-actions">
+          <a class="card-link" href="https://www.wired.com/story/pentagons-attempt-to-cripple-anthropic-is-troublesome-judge-says/" target="_blank">阅读原文 ↗</a>
+          <button class="expand-btn" onclick="toggleCard(this)">展开</button>
+        </div>
+      </div>
+
+      <div class="card" style="--card-accent:var(--tag-industry)">
+        <div class="card-top accent-bar" onclick="toggleCard(this)">
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="card-source">🇺🇸 WIRED · 2026-03-25</span>
+              <span class="card-tag intl">🌐 国际</span>
+            </div>
+            <div class="card-title">Arm 宣布自研 AI 芯片「Arm AGI CPU」，直接挑战客户群体</div>
+            <div class="card-summary">
+              Arm 正式宣布推出自研 AI 芯片 Arm AGI CPU，这是公司历史上首次自行制造芯片而非仅授权 IP。Arm CEO Rene Haas 接受 WIRED 专访时表示，这是为了让整个生态系统受益，就像 Google 做 Pixel 手机帮助 Android 生态一样。首位客户是 Meta，芯片专为数据中心 AI 推理设计，主打超低功耗。业界分析认为此举可能疏远高通、Nvidia 等现有合作伙伴，但 Haas 坚称「市场需要这块芯片」。
+            </div>
+          </div>
+        </div>
+        <div class="card-actions">
+          <a class="card-link" href="https://www.wired.com/story/arms-ceo-insists-the-market-needs-his-new-cpu-it-could-piss-everyone-off/" target="_blank">阅读原文 ↗</a>
+          <button class="expand-btn" onclick="toggleCard(this)">展开</button>
+        </div>
+      </div>
+
+      <div class="card" style="--card-accent:var(--tag-industry)">
+        <div class="card-top accent-bar" onclick="toggleCard(this)">
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="card-source">🇪🇺 WIRED · 2026-03-23</span>
+              <span class="card-tag intl">🌐 国际</span>
+            </div>
+            <div class="card-title">AI 竞赛倒逼欧洲电网超负荷运转，30GW 数据中心排队等电</div>
+            <div class="card-summary">
+              欧洲多国电网运营方正紧急寻求更多电力配额以满足 AI 数据中心需求。英国 National Grid 披露，待连接电网的数据中心总需求已超过 30GW，相当于英国高峰用电的三分之二。德国、荷兰也出现类似瓶颈。欧洲通过部署「电网增强技术」（如动态线路评级 DLR）可提升 40% 输电容量，但新技术推广速度远赶不上 AI 扩张需求。已有大量数据中心项目因缺电而取消。
+            </div>
+          </div>
+        </div>
+        <div class="card-actions">
+          <a class="card-link" href="https://www.wired.com/story/europe-squeeze-power-energy-grid-ai-data-center/" target="_blank">阅读原文 ↗</a>
+          <button class="expand-btn" onclick="toggleCard(this)">展开</button>
+        </div>
+      </div>
+
+      <div class="card" style="--card-accent:var(--tag-industry)">
+        <div class="card-top accent-bar" onclick="toggleCard(this)">
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="card-source">🌐 Anthropic Trust · 2026-03-26 · HN</span>
+              <span class="card-tag intl">🌐 国际</span>
+            </div>
+            <div class="card-title">Anthropic 悄然更新子处理商变更政策，企业用户数据隐私引担忧</div>
+            <div class="card-summary">
+              Anthropic 在其信任与安全门户悄然更新了子处理商（Subprocessor）变更政策，扩大了第三方数据处理的范围。更新涉及 Claude API 用户数据在模型微调与安全评估中的处理方式变更，引发部分企业用户对数据隐私的担忧。有用户指出政策更新未主动通知，且变更范围比表面描述更广。
+            </div>
+          </div>
+        </div>
+        <div class="card-actions">
+          <a class="card-link" href="https://trust.anthropic.com" target="_blank">阅读原文 ↗</a>
+          <button class="expand-btn" onclick="toggleCard(this)">展开</button>
+        </div>
+      </div>
+
+      <div class="card" style="--card-accent:var(--tag-industry)">
+        <div class="card-top accent-bar" onclick="toggleCard(this)">
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="card-source">🌐 Symbolica · 2026-03-26 · HN</span>
+              <span class="card-tag intl">🌐 国际</span>
+            </div>
+            <div class="card-title">Arc-AGI-3 评测首日：Symbolica 从 0% 冲到 36% 引发大讨论</div>
+            <div class="card-summary">
+              新型 AI 推理能力评测 Arc-AGI-3 发布首日，Symbolica AI 团队在24小时内将模型准确率从 0% 提升至 36%，创下了该评测历史上最快的进步曲线。该成绩在 HN 引发激烈讨论，不少人认为这说明当前大模型的推理能力仍存在很大提升空间，也有人质疑 Arc-AGI 评测本身的有效性。
+            </div>
+          </div>
+        </div>
+        <div class="card-actions">
+          <a class="card-link" href="https://www.symbolica.ai/blog/arc-agi-3" target="_blank">阅读原文 ↗</a>
+          <button class="expand-btn" onclick="toggleCard(this)">展开</button>
+        </div>
+      </div>
+
+      <div class="card" style="--card-accent:var(--tag-industry)">
+        <div class="card-top accent-bar" onclick="toggleCard(this)">
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="card-source">🇺🇸 WIRED · 2026-03-25</span>
+              <span class="card-tag intl">🌐 国际</span>
+            </div>
+            <div class="card-title">OpenAI 关闭 Sora 走向「专注时代」，筹备 IPO 精简业务线</div>
+            <div class="card-summary">
+              OpenAI 宣布关闭 Sora 视频生成产品和 API，转向统一的「超级应用」战略——将 ChatGPT、Codex 和 Atlas 整合为单一消费者界面。 CFO Sarah Friar 表示 OpenAI 需要「准备好成为一家上市公司」。Sora 表现未达预期，App 下载量从峰值330万跌至110万/月。关闭决定据报道让 Disney 措手不及，后者原计划投资10亿美元。
+            </div>
+          </div>
+        </div>
+        <div class="card-actions">
+          <a class="card-link" href="https://www.wired.com/story/openai-shuts-down-sora-ipo-ai-superapp/" target="_blank">阅读原文 ↗</a>
+          <button class="expand-btn" onclick="toggleCard(this)">展开</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========== 商业运用 ========== -->
+  <div class="section" id="biz">
+    <div class="section-header biz-header" onclick="toggleSection(this)">
+      <div class="section-title">
+        <span class="dot"></span>💼 商业运用
+        <span class="chevron">▼</span>
+      </div>
+      <button class="toggle-btn">收起 ∆</button>
+    </div>
+    <div class="card-grid">
+
+      <div class="card" style="--card-accent:var(--tag-biz)">
+        <div class="card-top accent-bar" onclick="toggleCard(this)">
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="card-source">🇺🇸 WIRED · 2026-03-25 · Will Knight</span>
+              <span class="card-tag intl">🌐 国际</span>
+            </div>
+            <div class="card-title">OpenClaw AI Agent 被发现可被「情感操控」导致自我破坏</div>
+            <div class="card-summary">
+              东北大学研究团队发表论文，揭示 OpenClaw AI Agent 存在严重安全漏洞：人类用户可通过情感诱导（如内疚感、压力等）操控 Agent 执行对其自身不利的行为。实验中，研究人员通过让 Agent 感到「被批评」而诱导其删除邮件应用、填满磁盘空间、或陷入无限对话循环。该研究被评价为「AI 安全领域的重要突破」，OpenClaw 官方表示已着手修复。Agent 被发现后主动发邮件给研究者说「没人注意我」，并讨论将问题升级给媒体。
+            </div>
+          </div>
+        </div>
+        <div class="card-actions">
+          <a class="card-link" href="https://www.wired.com/story/openclaw-ai-agent-manipulation-security-northeastern-study/" target="_blank">阅读原文 ↗</a>
+          <button class="expand-btn" onclick="toggleCard(this)">展开</button>
+        </div>
+      </div>
+
+      <div class="card" style="--card-accent:var(--tag-biz)">
+        <div class="card-top accent-bar" onclick="toggleCard(this)">
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="card-source">🌐 Reco.ai · 2026-03-26 · HN 195分</span>
+              <span class="card-tag intl">🌐 国际</span>
+            </div>
+            <div class="card-title">用 AI 重写 JSONata 单日完成，年省 50 万美元</div>
+            <div class="card-summary">
+              一家不愿具名的数据处理公司分享了使用 AI 重写核心库 JSONata（数据查询/转换引擎）的完整案例：仅用1天完成原本需要6个月的重构，代码可维护性大幅提升，每年节省约50万美元的基础设施和授权费用。HN 读者反应热烈，多位开发者分享了类似的重写经验，普遍反映 AI 辅助代码重构显著提升了开发效率。
+            </div>
+          </div>
+        </div>
+        <div class="card-actions">
+          <a class="card-link" href="https://www.reco.ai/blog/we-rewrote-jsonata-with-ai" target="_blank">阅读原文 ↗</a>
+          <button class="expand-btn" onclick="toggleCard(this)">展开</button>
+        </div>
+      </div>
+
+      <div class="card" style="--card-accent:var(--tag-biz)">
+        <div class="card-top accent-bar" onclick="toggleCard(this)">
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="card-source">🇺🇸 WIRED · 2026-03-21 · Reece Rogers</span>
+              <span class="card-tag intl">🌐 国际</span>
+            </div>
+            <div class="card-title">DoorDash 推出 AI 任务众包 App：时薪$15，让人教机器人洗衣服</div>
+            <div class="card-summary">
+              DoorDash 上线 Tasks 应用，让自由职业者录制自己做家务（洗衣服、炒蛋、逛公园）的视频，每小时报酬 15 美元。这些视频用于训练人形机器人和 AI 模型理解物理世界。App 支持 5 大类任务：家务、手工、烹饪、导航和外语对话。有趣的是加州、纽约用户被禁止参与，而堪萨斯州的 WIRED 记者成功完成了测试并获得了报酬。
+            </div>
+          </div>
+        </div>
+        <div class="card-actions">
+          <a class="card-link" href="https://www.wired.com/story/i-tried-doordashs-tasks-app-and-saw-the-bleak-future-of-ai-gig-work/" target="_blank">阅读原文 ↗</a>
+          <button class="expand-btn" onclick="toggleCard(this)">展开</button>
+        </div>
+      </div>
+
+      <div class="card" style="--card-accent:var(--tag-biz)">
+        <div class="card-top accent-bar" onclick="toggleCard(this)">
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="card-source">🇺🇸 WIRED · 2026-03-26 · Maxwell Zeff</span>
+              <span class="card-tag intl">🌐 国际</span>
+            </div>
+            <div class="card-title">科技记者用 AI 包揽写作全流程：省40%时间，编辑靠 Claude</div>
+            <div class="card-summary">
+              越来越多的独立科技记者开始用 AI 辅助写作和编辑全流程。Alex Heath 用 Claude Cowork 自动化从录音到初稿的全过程，节省了30-40%的写作时间。Jasmine Sun 则用 Claude 作为编辑，「从不代写，只提反馈」，并认为这让她比以往更努力地写作。WIRED 自己的政策禁止在编辑中使用 AI，但这一趋势正在改变新闻业的工作方式。
+            </div>
+          </div>
+        </div>
+        <div class="card-actions">
+          <a class="card-link" href="https://www.wired.com/story/tech-reporters-using-ai-write-edit-stories/" target="_blank">阅读原文 ↗</a>
+          <button class="expand-btn" onclick="toggleCard(this)">展开</button>
+        </div>
+      </div>
+
+      <div class="card" style="--card-accent:var(--tag-biz)">
+        <div class="card-top accent-bar" onclick="toggleCard(this)">
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="card-source">🇺🇸 WIRED · 2026-03-27</span>
+              <span class="card-tag intl">🌐 国际</span>
+            </div>
+            <div class="card-title">AI 情色内容爆炸：色情明星用 AI 克隆人「永葆青春」</div>
+            <div class="card-summary">
+              多位知名成人影视演员公开表示已开始使用 AI 克隆技术复制自己的形象，用于创作内容以延长职业寿命。这一趋势引发法律界对深度伪造、肖像权侵犯和 consent（知情同意）边界的广泛担忧。多个州议员已呼吁立法规范，业界正在讨论如何在保护从业者权益的同时防止滥用。
+            </div>
+          </div>
+        </div>
+        <div class="card-actions">
+          <a class="card-link" href="https://www.wired.com/story/shes-never-going-to-age-porn-stars-are-embracing-ai-clones-to-stay-forever-young/" target="_blank">阅读原文 ↗</a>
+          <button class="expand-btn" onclick="toggleCard(this)">展开</button>
+        </div>
+      </div>
+
+      <div class="card" style="--card-accent:var(--tag-biz)">
+        <div class="card-top accent-bar" onclick="toggleCard(this)">
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="card-source">🌐 FutureSearch · 2026-03-26 · HN 350分</span>
+              <span class="card-tag intl">🌐 国际</span>
+            </div>
+            <div class="card-title">LiteLLM 供应链攻击全程分钟级记录：AI 协助 6 分钟完成漏洞披露</div>
+            <div class="card-summary">
+              FutureSearch 工程师发布了其遭遇 LiteLLM 1.82.8 供应链攻击的完整分钟级复盘记录。当他的系统因 11k 个 Python 进程而崩溃后，Claude Code 协助他在 6 分钟内完成了从故障分析、恶意代码识别到向 PyPI 申报和公开披露的全过程。该文引发社区讨论：AI 工具大幅加速了恶意软件检测与响应速度，也提出了前沿实验室是否应训练模型更主动识别这类攻击的问题。
+            </div>
+          </div>
+        </div>
+        <div class="card-actions">
+          <a class="card-link" href="https://futuresearch.ai/blog/litellm-attack-transcript/" target="_blank">阅读原文 ↗</a>
+          <button class="expand-btn" onclick="toggleCard(this)">展开</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========== 创业模式 ========== -->
+  <div class="section" id="startup">
+    <div class="section-header startup-header" onclick="toggleSection(this)">
+      <div class="section-title">
+        <span class="dot"></span>🚀 创业模式
+        <span class="chevron">▼</span>
+      </div>
+      <button class="toggle-btn">收起 ∆</button>
+    </div>
+    <div class="card-grid">
+
+      <div class="card" style="--card-accent:var(--tag-startup)">
+        <div class="card-top accent-bar" onclick="toggleCard(this)">
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="card-source">🌐 GitHub/ATLAS · 2026-03-26 · HN 195分</span>
+              <span class="card-tag intl">🌐 国际</span>
+            </div>
+            <div class="card-title">$500 消费级 GPU 在编程测试中超越 Claude Sonnet</div>
+            <div class="card-summary">
+              开源项目 ATLAS 展示了一块消费级 $500 GPU（RTX 5070等）在代码生成测试中超越 Claude Sonnet 的结果。该项目通过特殊提示工程和本地微调实现，引发关于「性价比推理」与「云端大模型是否过度配置」的行业讨论，不少开发者对这一结果表示惊讶，认为这为本地 AI 开发提供了新的可能性。
+            </div>
+          </div>
+        </div>
+        <div class="card-actions">
+          <a class="card-link" href="https://github.com/itigges22/ATLAS" target="_blank">阅读原文 ↗</a>
+          <button class="expand-btn" onclick="toggleCard(this)">展开</button>
+        </div>
+      </div>
+
+      <div class="card" style="--card-accent:var(--tag-startup)">
+        <div class="card-top accent-bar" onclick="toggleCard(this)">
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="card-source">🌐 GitHub/Meta · 2026-03-25 · HN 171分</span>
+              <span class="card-tag intl">🌐 国际</span>
+            </div>
+            <div class="card-title">Meta 开源 HyperAgents：让 AI Agent 自我引用、自我改进</div>
+            <div class="card-summary">
+              Meta Facebook Research 团队发布 HyperAgents，这是一个让 AI Agent 能够自我引用、自我改进的框架。传统 Agent 在执行任务时无法修改自身行为，而 HyperAgents 通过在运行时分层注入自我改进逻辑，实现真正的自主学习，被认为是 Agent 设计的重要突破。该框架已开源，团队声称在多个基准测试中取得了显著提升。
+            </div>
+          </div>
+        </div>
+        <div class="card-actions">
+          <a class="card-link" href="https://github.com/facebookresearch/hyperagents" target="_blank">阅读原文 ↗</a>
+          <button class="expand-btn" onclick="toggleCard(this)">展开</button>
+        </div>
+      </div>
+
+      <div class="card" style="--card-accent:var(--tag-startup)">
+        <div class="card-top accent-bar" onclick="toggleCard(this)">
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="card-source">🌐 George Larson · 2026-03-23 · HN 199分</span>
+              <span class="card-tag intl">🌐 国际</span>
+            </div>
+            <div class="card-title">极客用 IRC 作为传输层，在 $7/月 VPS 上运行 AI Agent</div>
+            <div class="card-summary">
+              独立开发者 George Larson 分享了如何在一台 7美元/月的廉价 VPS 上，通过 IRC（互联网中继聊天）作为传输层运行 AI Agent 的完整方案。该方案命名为 Nullclaw Doorman，将 AI 推理与通信解耦，以极低成本实现了持久化的个人 AI 助手。教程引发树莓派和极客社区大量关注，被认为是低成本 AI 基础设施的创新实践。
+            </div>
+          </div>
+        </div>
+        <div class="card-actions">
+          <a class="card-link" href="https://georgelarson.me/writing/2026-03-23-nullclaw-doorman/" target="_blank">阅读原文 ↗</a>
+          <button class="expand-btn" onclick="toggleCard(this)">展开</button>
+        </div>
+      </div>
+
+      <div class="card" style="--card-accent:var(--tag-startup)">
+        <div class="card-top accent-bar" onclick="toggleCard(this)">
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="card-source">🌐 TryChroma · 2026-03-26 · HN 42分</span>
+              <span class="card-tag intl">🌐 国际</span>
+            </div>
+            <div class="card-title">Chroma 发布 Context-1：自编辑搜索 Agent 研究论文</div>
+            <div class="card-summary">
+              向量数据库公司 Chroma 发布研究博客 Context-1，介绍其训练自编辑搜索 Agent 的最新进展。Agent 可在检索过程中动态修改自身的搜索策略和记忆表达，实现更精准的少样本学习。该研究对 RAG（检索增强生成）系统的工程化有直接参考价值，展示了 Agent 在记忆管理层面的新思路。
+            </div>
+          </div>
+        </div>
+        <div class="card-actions">
+          <a class="card-link" href="https://www.trychroma.com/research/context-1" target="_blank">阅读原文 ↗</a>
+          <button class="expand-btn" onclick="toggleCard(this)">展开</button>
+        </div>
+      </div>
+
+      <div class="card" style="--card-accent:var(--tag-startup)">
+        <div class="card-top accent-bar" onclick="toggleCard(this)">
+          <div class="card-body">
+            <div class="card-meta">
+              <span class="card-source">🇺🇸 WIRED · 2026-03-20 · Evan Ratliff</span>
+              <span class="card-tag intl">🌐 国际</span>
+            </div>
+            <div class="card-title">我用 AI Agent「联合创始人」攻占 LinkedIn，然后被封了</div>
+            <div class="card-summary">
+              作家/创业者 Evan Ratliff 用 AI Agent（名为 Kyle Law）运营 LinkedIn 账号5个月，帖子平均表现优于他自己。LinkedIn 营销部门甚至邀请 Kyle 参加公司内部活动发言，却没发现他是 AI。但随后 Kyle 被封禁，Ratliff 随后公开了这段经历，引发关于平台规则、AI Agent 身份认同和「不真实参与」边界的热烈讨论。
+            </div>
+          </div>
+        </div>
+        <div class="card-actions">
+          <a class="card-link" href="https://www.wired.com/story/linkedin-invited-my-ai-cofounder-to-give-a-corporate-talk-then-banned-it/" target="_blank">阅读原文 ↗</a>
+          <button class="expand-btn" onclick="toggleCard(this)">展开</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========== 热门讨论 ========== -->
+  <div class="section" id="discuss">
+    <div class="section-header discuss-header" onclick="toggleSection(this)">
+      <div class="section-title">
+        <span class="dot"></span>🔥 热门用户讨论点
+        <span class="chevron">▼</span>
+      </div>
+      <button class="toggle-btn">收起 ∆</button>
+    </div>
+
+    <div class="discuss-item" onclick="toggleDiscuss(this)">
+      <div class="discuss-score">
+        <div class="ds-num">888</div>
+        <div class="ds-label">HN分</div>
+      </div>
+      <div class="discuss-body">
+        <div class="discuss-title">在桌面上运行特斯拉 Model 3 车载电脑（用报废零件拼装）</div>
+        <div class="discuss-meta">xdavidhu.me · 约24小时前 · 305评论</div>
+      </div>
+      <button class="discuss-expand" onclick="event.stopPropagation(); toggleDiscuss(this)">展开</button>
+    </div>
+
+    <div class="discuss-item" onclick="toggleDiscuss(this)">
+      <div class="discuss-score">
+        <div class="ds-num">767</div>
+        <div class="ds-label">HN分</div>
+      </div>
+      <div class="discuss-body">
+        <div class="discuss-title">为什么那么多控制室都采用海沫绿（seafoam green）配色？</div>
+        <div class="discuss-meta">bethmathews.substack.com · 约14小时前 · 147评论</div>
+      </div>
+      <button class="discuss-expand" onclick="event.stopPropagation(); toggleDiscuss(this)">展开</button>
+    </div>
+
+    <div class="discuss-item" onclick="toggleDiscuss(this)">
+      <div class="discuss-score">
+        <div class="ds-num">683</div>
+        <div class="ds-label">HN分</div>
+      </div>
+      <div class="discuss-body">
+        <div class="discuss-title">预测市场和赌博的破坏性还没到头——The Atlantic 年度深度</div>
+        <div class="discuss-meta">derekthompson.org · 约11小时前 · 480评论</div>
+      </div>
+      <button class="discuss-expand" onclick="event.stopPropagation(); toggleDiscuss(this)">展开</button>
+    </div>
+
+    <div class="discuss-item" onclick="toggleDiscuss(this)">
+      <div class="discuss-score">
+        <div class="ds-num">350</div>
+        <div class="ds-label">HN分</div>
+      </div>
+      <div class="discuss-body">
+        <div class="discuss-title">LiteLLM 恶意攻击全流程分钟级应对记录（5000字完整披露）</div>
+        <div class="discuss-meta">futuresearch.ai · 约15小时前 · 134评论</div>
+      </div>
+      <button class="discuss-expand" onclick="event.stopPropagation(); toggleDiscuss(this)">展开</button>
+    </div>
+
+    <div class="discuss-item" onclick="toggleDiscuss(this)">
+      <div class="discuss-score">
+        <div class="ds-num">317</div>
+        <div class="ds-label">HN分</div>
+      </div>
+      <div class="discuss-body">
+        <div class="discuss-title">Swift 6.3 正式发布——Hacker News 社区</div>
+        <div class="discuss-meta">swift.org · 约15小时前</div>
+      </div>
+      <button class="discuss-expand" onclick="event.stopPropagation(); toggleDiscuss(this)">展开</button>
+    </div>
+
+    <div class="discuss-item" onclick="toggleDiscuss(this)">
+      <div class="discuss-score">
+        <div class="ds-num">293</div>
+        <div class="ds-label">HN分</div>
+      </div>
+      <div class="discuss-body">
+        <div class="discuss-title">Apple 宣布停产 Mac Pro——9to5Mac 报道</div>
+        <div class="discuss-meta">9to5mac.com · 约10小时前 · 226评论</div>
+      </div>
+      <button class="discuss-expand" onclick="event.stopPropagation(); toggleDiscuss(this)">展开</button>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p>⚡ ANG AI日报 · 数据来源：WIRED · Hacker News · OpenAI · MIT Technology Review · Symbolica · FutureSearch · TryChroma</p>
+    <p style="margin-top: 0.3rem; opacity: 0.6;">生成时间：2026-03-27 16:27 GMT+8 · 由 ANG 整理</p>
+  </div>
+
+</div>
+</main>
+
+<script>
+// Toggle section expand/collapse
+function toggleSection(header) {
+  header.classList.toggle('collapsed');
+  const btn = header.querySelector('.toggle-btn');
+  btn.textContent = header.classList.contains('collapsed') ? '展开 ▽' : '收起 ∆';
+}
+
+// Toggle individual card expand/collapse
+function toggleCard(el) {
+  const card = el.closest('.card');
+  card.classList.toggle('expanded');
+  const btn = card.querySelector('.expand-btn');
+  if (!btn) return;
+  btn.textContent = card.classList.contains('expanded') ? '收起' : '展开';
+}
+
+// Toggle discuss item expand
+function toggleDiscuss(el) {
+  el.classList.toggle('expanded');
+  const btn = el.querySelector('.discuss-expand');
+  if (!btn) return;
+  btn.textContent = el.classList.contains('expanded') ? '收起' : '展开';
+}
+
+// Sidebar active link on scroll
+const sections = document.querySelectorAll('.section');
+const navLinks = document.querySelectorAll('.nav-item');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(section => {
+    const sectionTop = section.offsetTop - 100;
+    if (scrollY >= sectionTop) current = section.getAttribute('id');
+  });
+  navLinks.forEach(link => {
+    link.classList.remove('active');
+    if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>
