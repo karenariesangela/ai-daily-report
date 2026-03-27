@@ -34,7 +34,53 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
   line-height: 1.7;
   min-height: 100vh;
+  display: flex;
 }
+.section { scroll-margin-top: 1.5rem; }
+
+/* Sidebar */
+.sidebar {
+  width: 180px;
+  min-height: 100vh;
+  background: var(--card);
+  border-right: 1px solid var(--border);
+  position: fixed;
+  top: 0; left: 0;
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+  overflow-y: auto;
+}
+.sb-logo {
+  padding: 1.2rem 1rem;
+  border-bottom: 1px solid var(--border);
+  font-size: 1.3rem;
+  text-align: center;
+  line-height: 1.4;
+  font-weight: 900;
+}
+.sb-logo span { font-size: 0.65rem; color: var(--text-muted); display: block; }
+.sb-nav { padding: 0.8rem 0; flex: 1; }
+.nav-item {
+  display: block;
+  padding: 0.5rem 1rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: all 0.15s;
+  border-left: 3px solid transparent;
+}
+.nav-item:hover { color: var(--text); background: rgba(255,255,255,0.04); }
+.nav-item.active { color: var(--accent); border-left-color: var(--accent); background: rgba(232,121,249,0.06); }
+.sb-footer {
+  padding: 0.8rem 1rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+.main { margin-left: 180px; flex: 1; }
 
 /* Hero */
 .hero {
@@ -68,7 +114,7 @@ body {
 }
 .stats-strip::-webkit-scrollbar { display: none; }
 .stats-inner { max-width: 1200px; margin: 0 auto; display: flex; gap: 1.2rem; }
-.stat-chip {
+.stat-chip, a.stat-chip {
   display: flex; align-items: center; gap: 0.4rem;
   background: rgba(255,255,255,0.04);
   border: 1px solid var(--border);
@@ -78,14 +124,17 @@ body {
   white-space: nowrap;
   flex-shrink: 0;
   transition: all 0.15s;
+  text-decoration: none;
+  color: inherit;
 }
-.stat-chip:hover { border-color: var(--accent); }
+.stat-chip:hover, a.stat-chip:hover { border-color: var(--accent); transform: translateY(-1px); }
 .sc-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
 .sc-label { color: var(--text-muted); }
 .sc-num { font-weight: 800; font-size: 0.85rem; }
 
 /* Main container */
-.container { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; }
+.main { margin-left: 180px; flex: 1; }
+.container { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem; }
 
 /* Section */
 .section { margin-bottom: 2.5rem; }
@@ -204,8 +253,30 @@ body {
 </head>
 <body>
 
+<!-- Sidebar -->
+<nav class="sidebar">
+  <div class="sb-logo">🎨<br><span>AI日报</span></div>
+  <div class="sb-nav">
+    <a href="#overview" class="nav-item active" onclick="setActive(this)">📊 总览</a>
+    <a href="#video" class="nav-item" onclick="setActive(this)">🎬 AI视频</a>
+    <a href="#comfy" class="nav-item" onclick="setActive(this)">⚡ ComfyUI</a>
+    <a href="#claude" class="nav-item" onclick="setActive(this)">🤖 Claude</a>
+    <a href="#jimeng" class="nav-item" onclick="setActive(this)">✨ 即梦AI</a>
+    <a href="#liblib" class="nav-item" onclick="setActive(this)">🖼️ liblib</a>
+    <a href="#image" class="nav-item" onclick="setActive(this)">🖼️ AI图片</a>
+    <a href="#tool" class="nav-item" onclick="setActive(this)">🛠️ 工具更新</a>
+    <a href="#trend" class="nav-item" onclick="setActive(this)">🔭 技术趋势</a>
+    <a href="#case" class="nav-item" onclick="setActive(this)">💼 应用落地</a>
+    <a href="#event" class="nav-item" onclick="setActive(this)">🏆 赛事展览</a>
+    <a href="#opinion" class="nav-item" onclick="setActive(this)">💬 行业观点</a>
+  </div>
+  <div class="sb-footer">
+    2026-03-27<br>GMT+8
+  </div>
+</nav>
+
 <!-- Hero -->
-<div class="hero">
+  <div class="hero" id="overview">
   <div class="hero-inner">
     <div class="date">2026-03-27 · 周五 · GMT+8</div>
     <h1>🎨 AI设计日报</h1>
@@ -213,21 +284,21 @@ body {
   </div>
 </div>
 
+<div class="main">
 <!-- Stats strip -->
 <div class="stats-strip">
   <div class="stats-inner">
-    <div class="stat-chip"><div class="sc-dot" style="background:var(--tag-video)"></div><span class="sc-label">AI视频</span><span class="sc-num" style="color:var(--tag-video)">5</span></div>
-    <div class="stat-chip"><div class="sc-dot" style="background:var(--tag-comfy)"></div><span class="sc-label">ComfyUI</span><span class="sc-num" style="color:var(--tag-comfy)">4</span></div>
-    <div class="stat-chip"><div class="sc-dot" style="background:var(--tag-claude)"></div><span class="sc-label">Claude</span><span class="sc-num" style="color:var(--tag-claude)">3</span></div>
-    <div class="stat-chip"><div class="sc-dot" style="background:var(--tag-jimeng)"></div><span class="sc-label">即梦AI</span><span class="sc-num" style="color:var(--tag-jimeng)">3</span></div>
-    <div class="stat-chip"><div class="sc-dot" style="background:var(--tag-liblib)"></div><span class="sc-label">liblib</span><span class="sc-num" style="color:var(--tag-liblib)">3</span></div>
-    <div class="stat-chip"><div class="sc-dot" style="background:var(--tag-image)"></div><span class="sc-label">AI图片</span><span class="sc-num" style="color:var(--tag-image)">3</span></div>
-    <div class="stat-chip"><div class="sc-dot" style="background:var(--tag-tool)"></div><span class="sc-label">工具更新</span><span class="sc-num" style="color:var(--tag-tool)">4</span></div>
-    <div class="stat-chip"><div class="sc-dot" style="background:var(--tag-industry)"></div><span class="sc-label">行业动态</span><span class="sc-num" style="color:var(--tag-industry)">4</span></div>
-    <div class="stat-chip"><div class="sc-dot" style="background:var(--tag-trend)"></div><span class="sc-label">技术趋势</span><span class="sc-num" style="color:var(--tag-trend)">4</span></div>
-    <div class="stat-chip"><div class="sc-dot" style="background:var(--tag-case)"></div><span class="sc-label">应用落地</span><span class="sc-num" style="color:var(--tag-case)">4</span></div>
-    <div class="stat-chip"><div class="sc-dot" style="background:var(--tag-event)"></div><span class="sc-label">赛事展览</span><span class="sc-num" style="color:var(--tag-event)">3</span></div>
-    <div class="stat-chip"><div class="sc-dot" style="background:var(--tag-opinion)"></div><span class="sc-label">行业观点</span><span class="sc-num" style="color:var(--tag-opinion)">3</span></div>
+    <a class="stat-chip" href="#video"><div class="sc-dot" style="background:var(--tag-video)"></div><span class="sc-label">AI视频</span><span class="sc-num" style="color:var(--tag-video)">5</span></a>
+    <a class="stat-chip" href="#comfy"><div class="sc-dot" style="background:var(--tag-comfy)"></div><span class="sc-label">ComfyUI</span><span class="sc-num" style="color:var(--tag-comfy)">4</span></a>
+    <a class="stat-chip" href="#claude"><div class="sc-dot" style="background:var(--tag-claude)"></div><span class="sc-label">Claude</span><span class="sc-num" style="color:var(--tag-claude)">3</span></a>
+    <a class="stat-chip" href="#jimeng"><div class="sc-dot" style="background:var(--tag-jimeng)"></div><span class="sc-label">即梦AI</span><span class="sc-num" style="color:var(--tag-jimeng)">3</span></a>
+    <a class="stat-chip" href="#liblib"><div class="sc-dot" style="background:var(--tag-liblib)"></div><span class="sc-label">liblib</span><span class="sc-num" style="color:var(--tag-liblib)">3</span></a>
+    <a class="stat-chip" href="#image"><div class="sc-dot" style="background:var(--tag-image)"></div><span class="sc-label">AI图片</span><span class="sc-num" style="color:var(--tag-image)">3</span></a>
+    <a class="stat-chip" href="#tool"><div class="sc-dot" style="background:var(--tag-tool)"></div><span class="sc-label">工具更新</span><span class="sc-num" style="color:var(--tag-tool)">4</span></a>
+    <a class="stat-chip" href="#trend"><div class="sc-dot" style="background:var(--tag-trend)"></div><span class="sc-label">技术趋势</span><span class="sc-num" style="color:var(--tag-trend)">4</span></a>
+    <a class="stat-chip" href="#case"><div class="sc-dot" style="background:var(--tag-case)"></div><span class="sc-label">应用落地</span><span class="sc-num" style="color:var(--tag-case)">4</span></a>
+    <a class="stat-chip" href="#event"><div class="sc-dot" style="background:var(--tag-event)"></div><span class="sc-label">赛事展览</span><span class="sc-num" style="color:var(--tag-event)">3</span></a>
+    <a class="stat-chip" href="#opinion"><div class="sc-dot" style="background:var(--tag-opinion)"></div><span class="sc-label">行业观点</span><span class="sc-num" style="color:var(--tag-opinion)">3</span></a>
   </div>
 </div>
 
@@ -786,6 +857,7 @@ body {
   </div>
 
 </div>
+</div><!-- /.main -->
 
 <script>
 function toggleSection(h) {
@@ -799,6 +871,23 @@ function toggleCard(el) {
   if (!btn) return;
   btn.textContent = card.classList.contains('expanded') ? '收起' : '展开';
 }
+function setActive(el) {
+  document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
+  el.classList.add('active');
+}
+window.addEventListener('scroll', function() {
+  var sections = document.querySelectorAll('.section');
+  var navs = document.querySelectorAll('.nav-item');
+  var scrollY = window.scrollY + 120;
+  var current = '';
+  sections.forEach(function(s) {
+    if (scrollY >= s.offsetTop) current = s.id;
+  });
+  navs.forEach(function(n) {
+    n.classList.remove('active');
+    if (n.getAttribute('href') === '#' + current) n.classList.add('active');
+  });
+});
 </script>
 </body>
 </html>
